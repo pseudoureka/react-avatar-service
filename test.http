@@ -1,0 +1,8 @@
+POST https://learn.codeit.kr/api/avatar-service/users
+Content-Type: application/json
+
+{
+  "name" : "kim",
+  "email" : "kim@google.com",
+  "password" : "kim123"
+}
