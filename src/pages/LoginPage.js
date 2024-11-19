@@ -1,16 +1,19 @@
-import { useState } from 'react';
-import Label from '../components/Label';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import HorizontalRule from '../components/HorizontalRule';
-import Link from '../components/Link';
-import GoogleImage from '../assets/google.svg';
-import styles from './LoginPage.module.css';
+import { useState } from "react";
+import Label from "../components/Label";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import HorizontalRule from "../components/HorizontalRule";
+import Link from "../components/Link";
+import GoogleImage from "../assets/google.svg";
+import styles from "./LoginPage.module.css";
+import axios from "../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   function handleChange(e) {
@@ -25,7 +28,15 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     const { email, password } = values;
-    console.log({ email, password });
+    await axios.post(
+      "/auth/login",
+      {
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
+    navigate("/me");
   }
 
   return (
@@ -58,12 +69,7 @@ function LoginPage() {
         />
         <Button className={styles.Button}>로그인</Button>
         <HorizontalRule className={styles.HorizontalRule}>또는</HorizontalRule>
-        <Button
-          className={styles.GoogleButton}
-          type="button"
-          appearance="secondary"
-          as={Link}
-        >
+        <Button className={styles.GoogleButton} type="button" appearance="secondary" as={Link}>
           <img src={GoogleImage} alt="Google" />
           구글로 시작하기
         </Button>
