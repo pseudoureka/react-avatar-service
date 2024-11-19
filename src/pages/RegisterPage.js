@@ -8,8 +8,10 @@ import GoogleImage from "../assets/google.svg";
 import styles from "./RegisterPage.module.css";
 import { useToaster } from "../contexts/ToasterProvider";
 import axios from "../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     email: "",
@@ -40,6 +42,18 @@ function RegisterPage() {
       email,
       password,
     });
+
+    await axios.post(
+      "/auth/login",
+      {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    navigate("/me");
   }
 
   return (
