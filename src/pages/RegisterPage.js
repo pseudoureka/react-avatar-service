@@ -43,16 +43,10 @@ function RegisterPage() {
       password,
     });
 
-    await axios.post(
-      "/auth/login",
-      {
-        email,
-        password,
-      },
-      {
-        withCredentials: true,
-      }
-    );
+    await axios.post("/auth/login", {
+      email,
+      password,
+    });
     navigate("/me");
   }
 

@@ -28,14 +28,10 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     const { email, password } = values;
-    await axios.post(
-      "/auth/login",
-      {
-        email,
-        password,
-      },
-      { withCredentials: true }
-    );
+    await axios.post("/auth/login", {
+      email,
+      password,
+    });
     navigate("/me");
   }
 
