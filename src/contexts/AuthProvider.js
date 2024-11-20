@@ -26,24 +26,24 @@ export function AuthProvider({ children }) {
     setAvatar(avatar);
   }
   async function login({ email, password }) {
-    axios.post("/auth/login", { email, password });
+    await axios.post("/auth/login", { email, password });
 
     await getMe();
     await getMyAvatar();
   }
 
-  async function logout({ email, password }) {
+  async function logout() {
     /** @TODO 로그아웃 구현하기 */
   }
 
-  async function updateMe(formData) {
-    const res = await axios.patch("/users/me", formData);
+  async function updateMe({ name, email }) {
+    const res = await axios.patch("/users/me", { name, email });
     const nextUser = res.data;
     setUser(nextUser);
   }
 
   async function updateAvatar(values) {
-    const res = await axios.patch("users/me/avatar", values);
+    const res = await axios.patch("/users/me/avatar", values);
     const nextAvatar = res.data;
     setAvatar(nextAvatar);
   }
@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
 }
 
 export function useAuth() {
-  const context = useContext();
+  const context = useContext(AuthContext);
   if (!context) {
     throw new Error("반드시 AuthProvider 안에서 생성되어야 합니다.");
   }

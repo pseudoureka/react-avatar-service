@@ -1,53 +1,35 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../lib/axios';
-import Button from '../components/Button';
-import Avatar from '../components/Avatar';
-import { AvatarImageLabels } from '../assets/avatar';
-import AvatarSelector from '../components/AvatarSelector';
-import styles from './AvatarEditPage.module.css';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import Avatar from "../components/Avatar";
+import { AvatarImageLabels } from "../assets/avatar";
+import AvatarSelector from "../components/AvatarSelector";
+import styles from "./AvatarEditPage.module.css";
+import { useAuth } from "../contexts/AuthProvider";
 
-function AvatarProperties({
-  avatar: { skin, hairType, hairColor, clothes, accessories },
-}) {
+function AvatarProperties({ avatar: { skin, hairType, hairColor, clothes, accessories } }) {
   return (
     <div className={styles.AvatarProperties}>
       <h2 className={styles.AvatarPropertiesTitle}>적용된 속성들</h2>
       <div className={styles.Properties}>
         <div className={styles.PropertyName}>피부 색:</div>
-        <div className={styles.PropertyValue}>
-          {AvatarImageLabels.skin[skin]}
-        </div>
+        <div className={styles.PropertyValue}>{AvatarImageLabels.skin[skin]}</div>
         <div className={styles.PropertyName}>머리 종류:</div>
-        <div className={styles.PropertyValue}>
-          {AvatarImageLabels.hairType[hairType]}
-        </div>
+        <div className={styles.PropertyValue}>{AvatarImageLabels.hairType[hairType]}</div>
         <div className={styles.PropertyName}>머리 색:</div>
-        <div className={styles.PropertyValue}>
-          {AvatarImageLabels.hairColor[hairColor]}
-        </div>
+        <div className={styles.PropertyValue}>{AvatarImageLabels.hairColor[hairColor]}</div>
         <div className={styles.PropertyName}>옷:</div>
-        <div className={styles.PropertyValue}>
-          {AvatarImageLabels.clothes[clothes]}
-        </div>
+        <div className={styles.PropertyValue}>{AvatarImageLabels.clothes[clothes]}</div>
         <div className={styles.PropertyName}>액세서리:</div>
-        <div className={styles.PropertyValue}>
-          {AvatarImageLabels.accessories[accessories]}
-        </div>
+        <div className={styles.PropertyValue}>{AvatarImageLabels.accessories[accessories]}</div>
       </div>
     </div>
   );
 }
 
 function AvatarEditPage() {
-  const initialAvatar = {
-    skin: 'tone100',
-    hairType: 'none',
-    hairColor: 'black',
-    clothes: 'tshirtBasic',
-    accessories: 'none',
-  };
-  const [avatar, setAvatar] = useState(initialAvatar);
+  const { avatar: initialAvatar, updateAvatar } = useAuth();
+  const [avatar, setAvatar] = useState(null);
   const navigate = useNavigate();
 
   function handleSelectProperty(key, value) {
@@ -62,9 +44,13 @@ function AvatarEditPage() {
   }
 
   async function handleSubmit() {
-    await axios.patch('/users/me/avatar', avatar);
-    navigate('/me');
+    await updateAvatar(avatar);
+    navigate("/me");
   }
+
+  useEffect(() => {
+    setAvatar(initialAvatar);
+  }, [initialAvatar]);
 
   if (!avatar) return null;
 
