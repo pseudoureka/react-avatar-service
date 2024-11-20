@@ -6,11 +6,12 @@ import HorizontalRule from "../components/HorizontalRule";
 import Link from "../components/Link";
 import GoogleImage from "../assets/google.svg";
 import styles from "./LoginPage.module.css";
-import axios from "../lib/axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -28,10 +29,7 @@ function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault();
     const { email, password } = values;
-    await axios.post("/auth/login", {
-      email,
-      password,
-    });
+    await login({ email, password });
     navigate("/me");
   }
 
