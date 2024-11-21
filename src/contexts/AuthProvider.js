@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   const [avatar, setAvatar] = useState(null);
 
   async function getMe() {
-    const res = axios.get("/users/me");
+    const res = await axios.get("/users/me");
     const nextUser = res.data;
     setUser(nextUser);
   }
