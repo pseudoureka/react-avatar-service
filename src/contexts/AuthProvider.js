@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "../lib/axios";
 
 const AuthContext = createContext({
@@ -47,6 +47,11 @@ export function AuthProvider({ children }) {
     const nextAvatar = res.data;
     setAvatar(nextAvatar);
   }
+
+  useEffect(() => {
+    getMe();
+    getMyAvatar();
+  }, []);
 
   return (
     <AuthContext.Provider
