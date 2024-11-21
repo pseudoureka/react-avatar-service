@@ -9,6 +9,7 @@ import styles from "./RegisterPage.module.css";
 import { useToaster } from "../contexts/ToasterProvider";
 import axios from "../lib/axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function RegisterPage() {
     passwordRepeat: "",
   });
   const toast = useToaster();
+  const { login } = useAuth();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -43,10 +45,7 @@ function RegisterPage() {
       password,
     });
 
-    await axios.post("/auth/login", {
-      email,
-      password,
-    });
+    await login({ email, password });
     navigate("/me");
   }
 
